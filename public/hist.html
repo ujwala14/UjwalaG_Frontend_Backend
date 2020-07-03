@@ -1,0 +1,40 @@
+<html>
+<head>
+    <script src="angular/angular.min.js"> </script>
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular.min.js"></script> -->
+    <script> var myModule = angular.module("myApp",[]); </script>
+</head>
+
+<body ng-app="myApp" ng-controller='appController' >
+    <h1>Bouncing Ball ...</h1>
+    <a href="/"> Back </a><br><br>
+    <div ng-init="init()"> 
+        <b>Coefficient of Restitution - Number of bounces - [height vs time coordinates]</b>
+        <ul ng-repeat="Obj in response ">
+            <li>{{Obj.coeff}} - {{Obj.count}}<br>
+                {{Obj.coords}}
+            </li>
+        </ul>
+    </div>
+        
+    <script>
+        
+        myModule.controller ("appController",
+            function appController($scope, $http) {
+                $scope.data = {}
+                $scope.response = {}
+                $scope.init = function(){
+                    var posting = $http({
+                        method: 'GET',
+                        url: '/past_calc',   
+                    }).then (function (response) {
+                        /*executed when server responds back*/
+                        console.log(response.data);
+                        $scope.response = response.data;
+                    },function (error){
+					    console.log(error);
+                    });
+                }
+        });
+    </script>
+</body>
